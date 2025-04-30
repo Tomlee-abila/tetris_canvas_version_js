@@ -1,29 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tetris DOM Game</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
 </head>
 <body>
-  <h1>Tetris DOM</h1>
-  <div id="game-container">
-    <div id="grid"></div>
-    <div id="sidebar">
-      <h2>Controls</h2>
-      <ul>
-        <li>← →: Move</li>
-        <li>↓: Drop</li>
-        <li>↑: Rotate</li>
-        <li>P: Pause</li>
-        <li>R: Restart</li>
-      </ul>
-      <button id="pauseBtn">Pause</button>
-      <button id="resumeBtn">Resume</button>
-      <button id="restartBtn">Restart</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <canvas id="tetris" width="240" height="400"></canvas>
+    <script src="script.js"></script>
 </body>
 </html>
