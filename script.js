@@ -53,7 +53,7 @@ function drawMatrix(matrix, offset){
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0){
-                context.fillStyle = 'red';
+                context.fillStyle = colors[value];
                 context.fillRect(x + offset.x, 
                                 y + offset.y,
                                 1, 1);
@@ -116,6 +116,17 @@ function playerDrop(){
     }
     dropCounter = 0;
 }
+
+const colors = [
+    null,
+    'red',
+    'blue',
+    'violet',
+    'green',
+    'purple',
+    'orange',
+    'pink',
+]
 
 let lastTime = 0;
 function update(time = 0){
