@@ -66,9 +66,36 @@ function merge(arena, player){
 }
 
 function playerMove(dir){
-    player.pos.x + dir;
+    player.pos.x += dir;
     if (collide(arena, player)){
         player.pos.x -= dir;
+    }
+}
+
+function rotate(matrix, dir){
+    for (let y = 0; y < matrix.length; y++){
+        for (let x = 0; x < y; x++){
+            [
+                matrix[x][y],
+                matrix[y][x],
+            ] = [
+                matrix[y][x],
+                matrix[x][y],
+            ]
+        }
+    }
+
+    if (dir > 0){
+        matrix.forEach(row => row.reverse());
+    }else{
+        matrix.reverse();
+    }
+}
+
+function playerRotate(dir){
+    rotate(player.matrix, dir);    
+    if (collide(arena, player)){
+        rotate(player.matrix, -dir);
     }
 }
 
@@ -107,12 +134,17 @@ const player = {
 }
 
 document.addEventListener('keydown', event => {
+    console.log(event)
     if (event.key === "ArrowLeft"){        
         playerMove(-1);
     }else if (event.key === "ArrowRight"){        
         playerMove(1);
     }else if (event.key === "ArrowDown"){
         playerDrop();
+    }else if (event.key === "q"){
+        playerRotate(-1);
+    }else if (event.key === "w"){
+        playerRotate(1);
     }
 })
 
