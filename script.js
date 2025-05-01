@@ -1,3 +1,42 @@
+const grid = document.getElementById("grid");
+const pauseBtn = document.getElementById("pauseBtn");
+const resumeBtn = document.getElementById("resumeBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+const width = 10;
+const height = 20;
+let cells = [];
+let currentShape = [];
+let timer = null;
+let paused = false;
+grid.style.gridTemplateColumns = "repeat(" + width + ", 30px)";
+grid.style.gridTemplateRows = "repeat(" + height + ", 30px)";
+
+
+function createGrid() {
+  grid.innerHTML = "";
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.id = "cell" + ((y * width) + x);
+      grid.appendChild(cell)
+    }
+  }
+}
+
+function colorCell(x, y, color) {
+  const index = y * width + x;
+  const cell = document.getElementById("cell" + index);
+  if (cell) {
+    cell.style.backgroundColor = color;
+  }
+}
+
+
+createGrid();
+
+
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
