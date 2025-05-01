@@ -169,8 +169,10 @@ function playerDrop(){
     if (collide(arena, player)){
         player.pos.y--;
         merge(arena, player);
-        player.pos.y = 0;
-        player.pos.x = 5;
+        playerReset();
+        arenaSweep();
+        // player.pos.y = 0;
+        // player.pos.x = 5;
     }
     dropCounter = 0;
 }
