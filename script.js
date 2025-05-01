@@ -12,12 +12,20 @@ const matrix = [
 let dropCounter = 0;
 let dropInterval = 1000;
 
-// function collide(arena, player){
-//     const [m, o] = [player.matrix, player.pos];
-//     for (let y = 0; y < m.length; ++y){
-//         for (let x = 0; x < m[])
-//     }
-// }
+function collide(arena, player){
+    // const [m, o] = [player.matrix, player.pos];
+    for (let y = 0; y < player.matrix.length; y++){
+        for (let x = 0; x < player.matrix[y].length; x++){
+            if (player.matrix[y][x] !== 0 &&
+                (arena[y + player.pos.y] &&
+                arena[y + player.pos.y][x + player.pos.x]) !== 0){
+                    return true;
+            }
+
+        }
+    }
+    return false;
+}
 
 function createMatrix(w, h){
     const matrix = [];
@@ -30,6 +38,7 @@ function createMatrix(w, h){
 function draw(){
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.clientWidth, canvas.height); 
+    drawMatrix(arena, {x:0, y: 0})
     drawMatrix(player.matrix, player.pos);
 }
 
@@ -56,8 +65,21 @@ function merge(arena, player){
     })
 }
 
+function playerMove(dir){
+    player.pos.x + dir;
+    if (collide(arena, player)){
+        player.pos.x -= dir;
+    }
+}
+
 function playerDrop(){
     player.pos.y++;
+    if (collide(arena, player)){
+        player.pos.y--;
+        merge(arena, player);
+        player.pos.y = 0;
+        player.pos.x = 5;
+    }
     dropCounter = 0;
 }
 
@@ -85,11 +107,10 @@ const player = {
 }
 
 document.addEventListener('keydown', event => {
-    console.log(event);
-    if (event.key === "ArrowLeft"){
-        player.pos.x--;
-    }else if (event.key === "ArrowRight"){
-        player.pos.x++;
+    if (event.key === "ArrowLeft"){        
+        playerMove(-1);
+    }else if (event.key === "ArrowRight"){        
+        playerMove(1);
     }else if (event.key === "ArrowDown"){
         playerDrop();
     }
