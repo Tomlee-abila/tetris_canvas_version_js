@@ -25,22 +25,38 @@ function createGrid() {
   }
 }
 
+createGrid();
+
 function colorCell(x, y, color) {
   const index = y * width + x;
-  const cell = document.getElementById("cell" + index);
+  const cell = document.getElementById("cell" + index);  
+  cell.style.backgroundColor = 'green';
   if (cell) {
-    cell.style.backgroundColor = color;
+    if (cell.style.backgroundColor !== color){
+      cell.style.backgroundColor = color;
+    }
   }
 }
-
-
-createGrid();
 
 
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
 context.scale(20, 20)
+
+function drawMatrix(matrix, offset){
+  matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+          if (value !== 0){
+              context.fillStyle = colors[value];
+              context.fillRect(x + offset.x, 
+                              y + offset.y,
+                              1, 1);
+              colorCell(x + offset.x, y + offset.y, colors[value])
+          }
+      })
+  });
+}
  
 function arenaSweep(){
     outer: for (let y = arena.length -1; y > 0; y--){
@@ -81,24 +97,22 @@ function createMatrix(w, h){
     return matrix;
 }
 
-function draw(){
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, canvas.clientWidth, canvas.height); 
-    drawMatrix(arena, {x:0, y: 0})
-    drawMatrix(player.matrix, player.pos);
+function clear_grid(){
+  for (let y = 0; y < height; y++){
+    for (let x = 0; x < width; x++){
+      colorCell(x, y, colors[0]);
+    }
+  }
 }
 
-function drawMatrix(matrix, offset){
-    matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-            if (value !== 0){
-                context.fillStyle = colors[value];
-                context.fillRect(x + offset.x, 
-                                y + offset.y,
-                                1, 1);
-            }
-        })
-    });
+function draw(){
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, canvas.clientWidth, canvas.height);
+    
+    
+    clear_grid();
+    drawMatrix(arena, {x:0, y: 0})
+    drawMatrix(player.matrix, player.pos);
 }
 
 function merge(arena, player){
