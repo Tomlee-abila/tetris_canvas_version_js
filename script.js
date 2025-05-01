@@ -217,8 +217,8 @@ function playerDrop(){
 }
 
 const colors = [
-    null,
-    'red',
+    '#333',
+    "red",
     'blue',
     'violet',
     'green',
