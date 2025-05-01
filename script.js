@@ -9,6 +9,24 @@ const matrix = [
     [0, 1, 0],
 ]
 
+let dropCounter = 0;
+let dropInterval = 1000;
+
+// function collide(arena, player){
+//     const [m, o] = [player.matrix, player.pos];
+//     for (let y = 0; y < m.length; ++y){
+//         for (let x = 0; x < m[])
+//     }
+// }
+
+function createMatrix(w, h){
+    const matrix = [];
+    while (h--){
+        matrix.push(new Array(w). fill(0));        
+    }
+    return matrix;
+}
+
 function draw(){
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.clientWidth, canvas.height); 
@@ -28,8 +46,15 @@ function drawMatrix(matrix, offset){
     });
 }
 
-let dropCounter = 0;
-let dropInterval = 1000;
+function merge(arena, player){
+    player.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0){
+                arena[y + player.pos.y][x + player.pos.x] = value;
+            }
+        })
+    })
+}
 
 function playerDrop(){
     player.pos.y++;
@@ -49,6 +74,10 @@ function update(time = 0){
     draw();
     requestAnimationFrame(update);
 }
+
+const arena = createMatrix(12, 20);
+console.log(arena);
+console.table(arena);
 
 const player = {
     pos: {x: 5, y: 5},
