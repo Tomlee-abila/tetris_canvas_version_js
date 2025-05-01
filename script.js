@@ -3,7 +3,7 @@ const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-const width = 10;
+const width = 20;
 const height = 20;
 let cells = [];
 let currentShape = [];
@@ -241,7 +241,7 @@ function update(time = 0){
     requestAnimationFrame(update);
 }
 
-const arena = createMatrix(12, 20);
+const arena = createMatrix(width, height);
 console.log(arena);
 console.table(arena);
 
