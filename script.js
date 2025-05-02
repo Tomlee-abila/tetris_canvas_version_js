@@ -270,7 +270,7 @@ player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
 
 document.addEventListener('keydown', event => {
     console.log(event)
-    if (event.key === "ArrowLeft"){        
+    if (event.key === "ArrowLeft" && !game.pause){        
         playerMove(-1);
     }else if (event.key === "ArrowRight"){        
         playerMove(1);
