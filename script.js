@@ -280,7 +280,7 @@ document.addEventListener('keydown', event => {
         restart()
     }else if (event.key === "p"){
         game.pause = !game.pause
-    }else if (event.key === "ArrowUp"){
+    }else if (event.key === "ArrowUp" && !game.pause){
         playerRotate(1);
     }
 })
