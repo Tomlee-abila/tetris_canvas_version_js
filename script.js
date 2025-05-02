@@ -228,7 +228,7 @@ function update(time = 0){
     
     dropCounter += deltaTime;
     
-    if (dropCounter > dropInterval){
+    if (dropCounter >= dropInterval && !game.pause){
         playerDrop();
     }
     draw();
@@ -240,8 +240,8 @@ console.log(arena);
 console.table(arena);
 
 const player = {
-    pos: {x: 5, y: 5},
-    matrix: createPiece('T')
+    pos: {x: (arena[0].length/2 | 0), y: 0},
+    matrix: createPiece(pieces[pieces.length * Math.random() | 0])
 }
 
 document.addEventListener('keydown', event => {
@@ -252,9 +252,11 @@ document.addEventListener('keydown', event => {
         playerMove(1);
     }else if (event.key === "ArrowDown"){
         playerDrop();
-    }else if (event.key === "q"){
-        playerRotate(-1);
-    }else if (event.key === "w"){
+    }else if (event.key === "r"){
+        restart()
+    }else if (event.key === "p"){
+        game.pause = !game.pause
+    }else if (event.key === "ArrowUp"){
         playerRotate(1);
     }
 })
