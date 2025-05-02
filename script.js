@@ -244,6 +244,23 @@ const arena = createMatrix(width, height);
 console.log(arena);
 console.table(arena);
 
+const game = {
+    pause: false,
+    score: 0,
+    over: false,
+};
+
+function restart(){
+    arena.forEach(row => row.fill(0));
+    player.pos = {x: (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0), y: 0};
+
+    game = {
+        pause: false,
+        score: 0,
+        over: false,
+    };
+}
+
 const player = {
     pos: {x: (arena[0].length/2 | 0), y: 0},
     matrix: createPiece(pieces[pieces.length * Math.random() | 0])
