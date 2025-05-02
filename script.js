@@ -265,6 +265,8 @@ const player = {
     pos: {x: (arena[0].length/2 | 0), y: 0},
     matrix: createPiece(pieces[pieces.length * Math.random() | 0])
 }
+player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
+
 
 document.addEventListener('keydown', event => {
     console.log(event)
