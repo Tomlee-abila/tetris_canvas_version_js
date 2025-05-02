@@ -13,8 +13,17 @@ body {
 
 #grid {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(20, 30px);
+  /* grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(20, 30px); */
+  gap: 2px;
+  background: #222;
+  border: 2px solid #555;
+}
+
+#next {
+  display: grid;
+  grid-template-columns: repeat(5 20px);
+  grid-template-rows: repeat(5 20px);
   gap: 2px;
   background: #222;
   border: 2px solid #555;
@@ -25,10 +34,6 @@ body {
   height: 30px;
   background-color: #333;
   border-radius: 0.3rem;
-}
-
-.cell.active {
-  background-color: #0ff;
 }
 
 #sidebar {
