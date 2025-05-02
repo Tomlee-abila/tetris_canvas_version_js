@@ -274,7 +274,7 @@ document.addEventListener('keydown', event => {
         playerMove(-1);
     }else if (event.key === "ArrowRight" && !game.pause){        
         playerMove(1);
-    }else if (event.key === "ArrowDown"){
+    }else if (event.key === "ArrowDown" && !game.pause){
         playerDrop();
     }else if (event.key === "r"){
         restart()
