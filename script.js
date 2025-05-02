@@ -5,10 +5,6 @@ const restartBtn = document.getElementById("restartBtn");
 
 const width = 20;
 const height = 20;
-let cells = [];
-let currentShape = [];
-let timer = null;
-let paused = false;
 grid.style.gridTemplateColumns = "repeat(" + width + ", 30px)";
 grid.style.gridTemplateRows = "repeat(" + height + ", 30px)";
 
@@ -30,7 +26,6 @@ createGrid();
 function colorCell(x, y, color) {
   const index = y * width + x;
   const cell = document.getElementById("cell" + index);  
-  cell.style.backgroundColor = 'green';
   if (cell) {
     if (cell.style.backgroundColor !== color){
       cell.style.backgroundColor = color;
@@ -38,20 +33,10 @@ function colorCell(x, y, color) {
   }
 }
 
-
-const canvas = document.getElementById('tetris');
-const context = canvas.getContext('2d');
-
-context.scale(20, 20)
-
 function drawMatrix(matrix, offset){
   matrix.forEach((row, y) => {
       row.forEach((value, x) => {
           if (value !== 0){
-              context.fillStyle = colors[value];
-              context.fillRect(x + offset.x, 
-                              y + offset.y,
-                              1, 1);
               colorCell(x + offset.x, y + offset.y, colors[value])
           }
       })
@@ -71,11 +56,9 @@ function arenaSweep(){
     }
 }
 
-let dropCounter = 0;
-let dropInterval = 1000;
+
 
 function collide(arena, player){
-    // const [m, o] = [player.matrix, player.pos];
     for (let y = 0; y < player.matrix.length; y++){
         for (let x = 0; x < player.matrix[y].length; x++){
             if (player.matrix[y][x] !== 0 &&
@@ -106,10 +89,6 @@ function clear_grid(){
 }
 
 function draw(){
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, canvas.clientWidth, canvas.height);
-    
-    
     clear_grid();
     drawMatrix(arena, {x:0, y: 0})
     drawMatrix(player.matrix, player.pos);
@@ -155,9 +134,9 @@ function rotate(matrix, dir){
 function createPiece (type) {
     if (type === 'T'){
         return[
-            [0, 0, 0],
             [1, 1, 1],
             [0, 1, 0],
+            [0, 0, 0],
         ];
     }else if (type === 'O'){
         return[
@@ -198,15 +177,18 @@ function createPiece (type) {
     }
 }
 
-function playerReset(){
-    const pieces = 'ILJOTSZ'
+const pieces = 'ILJOTSZ';
+
+function playerReset(){    
     player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.y = 0;
     player.pos.x = (arena[0].length/2 | 0) -
                     (player.matrix[0].length/2 | 0);
     
     if (collide(arena, player)){
-        arena.forEach(row => row.fill(0))
+        game.over = true;
+        game.pause = true;
+        restart();
     }
 }
 
@@ -224,8 +206,6 @@ function playerDrop(){
         merge(arena, player);
         playerReset();
         arenaSweep();
-        // player.pos.y = 0;
-        // player.pos.x = 5;
     }
     dropCounter = 0;
 }
