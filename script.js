@@ -222,6 +222,10 @@ const colors = [
 ]
 
 let lastTime = 0;
+
+let dropCounter = 0;
+let dropInterval = 1000;
+
 function update(time = 0){
     const deltaTime = time -lastTime;
     lastTime = time;
@@ -230,6 +234,7 @@ function update(time = 0){
     
     if (dropCounter >= dropInterval && !game.pause){
         playerDrop();
+        lastTime = time
     }
     draw();
     requestAnimationFrame(update);
