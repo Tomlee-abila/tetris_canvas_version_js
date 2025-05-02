@@ -1,12 +1,19 @@
 const grid = document.getElementById("grid");
+const next_grid = document.getElementById("next")
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-const width = 20;
+const width = 10;
 const height = 20;
 grid.style.gridTemplateColumns = "repeat(" + width + ", 30px)";
 grid.style.gridTemplateRows = "repeat(" + height + ", 30px)";
+
+const next_width = 5;
+const next_height = 5;
+next_grid.style.gridTemplateColumns = "repeat(" + next_width + ", 30px)";
+next_grid.style.gridTemplateRows = "repeat(" + next_height + ", 30px)";
+
 
 
 function createGrid() {
@@ -21,7 +28,20 @@ function createGrid() {
   }
 }
 
+function createNextGrid() {
+    next_grid.innerHTML = "";
+    for (let y = 0; y < next_height; y++) {
+      for (let x = 0; x < next_width; x++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.id = "cell" + ((y * width) + x);
+        next_grid.appendChild(cell)
+      }
+    }
+  }
+
 createGrid();
+createNextGrid();
 
 function colorCell(x, y, color) {
   const index = y * width + x;
@@ -187,7 +207,7 @@ function playerReset(){
     
     if (collide(arena, player)){
         game.over = true;
-        game.pause = true;
+        // game.pause = true;
         restart();
     }
 }
