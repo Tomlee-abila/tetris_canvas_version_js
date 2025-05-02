@@ -272,7 +272,7 @@ document.addEventListener('keydown', event => {
     console.log(event)
     if (event.key === "ArrowLeft" && !game.pause){        
         playerMove(-1);
-    }else if (event.key === "ArrowRight"){        
+    }else if (event.key === "ArrowRight" && !game.pause){        
         playerMove(1);
     }else if (event.key === "ArrowDown"){
         playerDrop();
