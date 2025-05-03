@@ -72,12 +72,6 @@ function arenaSweep(){
         arena.unshift(row);
         y++;
         game.score += game.add;
-        score.innerHTML = game.score;
-        if (dropInterval > 150){
-            dropInterval -= 20;
-            game.add++
-        }
-        
     }
 }
 
@@ -211,20 +205,42 @@ function playerReset(){
     player.pos.y = 0;
     player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
-    if (collide(arena, player)){
-        drawMatrix(player.matrix, player.pos, main_grid);
+    if (collide(arena, player)) {
+        // drawMatrix(player.matrix, player.pos, main_grid);
         game.over = true;
-        // game.pause = true;
-        restart();
+        showGameOverPopup();
     }
 }
 
-function playerRotate(dir){
-    rotate(player.matrix, dir);    
-    if (collide(arena, player)){
-        rotate(player.matrix, -dir);
+function showGameOverPopup() {
+    document.getElementById('finalScore').textContent = game.score;
+    document.getElementById('gameOverPopup').style.display = 'flex';
+}
+
+
+function playerRotate(dir) {
+    const pos = player.pos.x;
+    rotate(player.matrix, dir);
+    let offset = 1;
+
+    while (collide(arena, player)) {
+        if (offset > 0) {
+            player.pos.x = pos + ++offset;
+            if (offset === 3 && collide(arena, player)) {
+                player.pos.x = pos;
+                offset = -1;
+            }
+        } else {
+            player.pos.x = pos + offset--;
+            if (offset === -3 && collide(arena, player)) {
+                player.pos.x = pos;
+                rotate(player.matrix, -dir);
+                break;
+            }
+        }
     }
 }
+
 
 function playerDrop(){
     player.pos.y++;
@@ -254,6 +270,7 @@ let dropCounter = 0;
 let dropInterval = 1000;
 
 function update(time = 0){
+    if (game.over) return;
     const deltaTime = time -lastTime;
     lastTime = time;
     
@@ -263,6 +280,7 @@ function update(time = 0){
         playerDrop();
         lastTime = time
     }
+    score.innerHTML = game.score; 
     draw();
     requestAnimationFrame(update);
 }
@@ -278,16 +296,26 @@ const game = {
     add: 5,
 };
 
-function restart(){
+function restart() {
     arena.forEach(row => row.fill(0));
-    player.pos = {x: (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0), y: 0};
+    player.pos = {
+        x: (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0),
+        y: 0
+    };
 
     game.pause = false;
     game.score = 0;
     game.over = false;
     score.innerHTML = 0;
+
+    document.getElementById('gameOverPopup').style.display = 'none';
+
+    playerReset();
+
     draw();
+    requestAnimationFrame(update);
 }
+
 
 const player = {
     pos: {x: (arena[0].length/2 | 0), y: 0},
