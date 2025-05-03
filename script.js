@@ -50,11 +50,11 @@ function colorCell(x, y, color, gr) {
   }
 }
 
-function drawMatrix(matrix, offset){
+function drawMatrix(matrix, offset, gr){
   matrix.forEach((row, y) => {
       row.forEach((value, x) => {
           if (value !== 0){
-              colorCell(x + offset.x, y + offset.y, colors[value])
+              colorCell(x + offset.x, y + offset.y, colors[value], gr);
           }
       })
   });
@@ -97,18 +97,20 @@ function createMatrix(w, h){
     return matrix;
 }
 
-function clear_grid(){
-  for (let y = 0; y < height; y++){
-    for (let x = 0; x < width; x++){
-      colorCell(x, y, colors[0]);
+function clear_grid(gr){
+  for (let y = 0; y < gr.height; y++){
+    for (let x = 0; x < gr.width; x++){
+      colorCell(x, y, colors[0], gr);
     }
   }
 }
 
 function draw(){
-    clear_grid();
-    drawMatrix(arena, {x:0, y: 0})
-    drawMatrix(player.matrix, player.pos);
+    clear_grid(main_grid);
+    drawMatrix(arena, {x:0, y: 0}, main_grid)
+    drawMatrix(player.matrix, player.pos, main_grid);
+    clear_grid(next_grid);
+    drawMatrix(next_grid.matrix, {x: 1, y: 1}, next_grid)
 }
 
 function merge(arena, player){
@@ -194,10 +196,10 @@ function createPiece (type) {
     }
 }
 
-const pieces = 'ILJOTSZ';
 
-function playerReset(){    
-    player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+function playerReset(){
+    player.matrix = next_grid.matrix    
+    next_grid.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.y = 0;
     player.pos.x = (arena[0].length/2 | 0) -
                     (player.matrix[0].length/2 | 0);
@@ -257,14 +259,14 @@ function update(time = 0){
     requestAnimationFrame(update);
 }
 
-const arena = createMatrix(width, height);
+const arena = createMatrix(main_grid.width, main_grid.height);
 console.log(arena);
 console.table(arena);
 
 const game = {
     pause: false,
     score: 0,
-    over: false,
+    over: false
 };
 
 function restart(){
@@ -280,7 +282,7 @@ function restart(){
 
 const player = {
     pos: {x: (arena[0].length/2 | 0), y: 0},
-    matrix: createPiece(pieces[pieces.length * Math.random() | 0])
+    matrix: next_grid.matrix
 }
 player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
 
