@@ -273,11 +273,10 @@ function restart(){
     arena.forEach(row => row.fill(0));
     player.pos = {x: (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0), y: 0};
 
-    game = {
-        pause: false,
-        score: 0,
-        over: false,
-    };
+    game.pause = false;
+    game.score = 0;
+    game.over = false;
+    draw();
 }
 
 const player = {
@@ -296,7 +295,7 @@ document.addEventListener('keydown', event => {
     }else if (event.key === "ArrowDown" && !game.pause){
         playerDrop();
     }else if (event.key === "r"){
-        restart()
+        restart();
     }else if (event.key === "p"){
         game.pause = !game.pause
     }else if (event.key === "ArrowUp" && !game.pause){
