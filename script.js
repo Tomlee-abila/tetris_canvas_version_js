@@ -42,13 +42,13 @@ createGrid(next_grid);
 
 
 function colorCell(x, y, color, gr) {
-  const index = y * gr.width + x;
-  const cell = document.querySelector(gr.cell + index);   
-  if (cell) {
-    if (cell.style.backgroundColor !== color){
-      cell.style.backgroundColor = color;
+    const index = y * gr.width + x;
+    const cell = gr.grid.children[index];
+    if (cell) {
+        if (cell.style.background !== color) {
+            cell.style.background = color;
+        }
     }
-  }
 }
 
 function drawMatrix(matrix, offset, gr){
@@ -206,6 +206,7 @@ function playerReset(){
     player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
     if (collide(arena, player)) {
+        game.pause = true;
         showGameOverPopup();
     }
 }
@@ -291,14 +292,14 @@ function playerDrop(){
 
 const colors = [
     '#333',
-    "red",
-    'blue',
-    'violet',
-    'green',
-    'purple',
-    'orange',
-    'pink',
-]
+    'linear-gradient(45deg, #ff4040, #ff8080)', 
+    'linear-gradient(45deg, #4040ff, #8080ff)', 
+    'linear-gradient(45deg, #ff00ff, #ff80ff)', 
+    'linear-gradient(45deg, #00cc00, #80ff80)', 
+    'linear-gradient(45deg, #00ffff, #80ffff)', 
+    'linear-gradient(45deg, #ff9900, #ffc107)', 
+    'linear-gradient(45deg, #ff69b4, #ffb6c1)', 
+];
 
 let lastTime = 0;
 
