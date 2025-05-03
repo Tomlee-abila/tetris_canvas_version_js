@@ -30,8 +30,8 @@ function createGrid(gr) {
     for (let x = 0; x < gr.width; x++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      cell.id = "cell" + ((y * width) + x);
-      grid.appendChild(cell)
+      cell.id = "cell" + ((y * gr.width) + x);
+      gr.grid.appendChild(cell)
     }
   }
 }
@@ -40,9 +40,9 @@ createGrid(main_grid);
 createGrid(next_grid);
 
 
-function colorCell(x, y, color) {
-  const index = y * width + x;
-  const cell = document.getElementById("cell" + index);  
+function colorCell(x, y, color, gr) {
+  const index = y * gr.width + x;
+  const cell = document.querySelector(gr.cell + index);   
   if (cell) {
     if (cell.style.backgroundColor !== color){
       cell.style.backgroundColor = color;
