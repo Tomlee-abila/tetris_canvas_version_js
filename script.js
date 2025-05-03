@@ -292,13 +292,13 @@ function playerDrop(){
 
 const colors = [
     '#333',
-    'linear-gradient(45deg, #ff4040, #ff8080)', 
-    'linear-gradient(45deg, #4040ff, #8080ff)', 
-    'linear-gradient(45deg, #ff00ff, #ff80ff)', 
-    'linear-gradient(45deg, #00cc00, #80ff80)', 
-    'linear-gradient(45deg, #00ffff, #80ffff)', 
-    'linear-gradient(45deg, #ff9900, #ffc107)', 
-    'linear-gradient(45deg, #ff69b4, #ffb6c1)', 
+    'linear-gradient(45deg, #ff4040,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #4040ff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #ff00ff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #00cc00,rgb(252, 252, 252))', 
+    'linear-gradient(45deg, #00ffff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #ff9900,rgb(253, 253, 253))', 
+    'linear-gradient(45deg, #ff69b4,rgb(255, 255, 255))', 
 ];
 
 let lastTime = 0;
