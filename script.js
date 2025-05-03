@@ -70,6 +70,13 @@ function arenaSweep(){
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         y++;
+        game.score += game.add;
+        score.innerHTML = game.score;
+        if (dropInterval > 150){
+            dropInterval -= 20;
+            game.add++
+        }
+        
     }
 }
 
@@ -201,10 +208,10 @@ function playerReset(){
     player.matrix = next_grid.matrix    
     next_grid.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.y = 0;
-    player.pos.x = (arena[0].length/2 | 0) -
-                    (player.matrix[0].length/2 | 0);
+    player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
     if (collide(arena, player)){
+        drawMatrix(player.matrix, player.pos, main_grid);
         game.over = true;
         // game.pause = true;
         restart();
@@ -266,7 +273,8 @@ console.table(arena);
 const game = {
     pause: false,
     score: 0,
-    over: false
+    over: false,
+    add: 5,
 };
 
 function restart(){
@@ -276,6 +284,7 @@ function restart(){
     game.pause = false;
     game.score = 0;
     game.over = false;
+    score.innerHTML = 0;
     draw();
 }
 
