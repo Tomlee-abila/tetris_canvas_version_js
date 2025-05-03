@@ -1,25 +1,33 @@
-const grid = document.getElementById("grid");
-const next_grid = document.getElementById("next")
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const restartBtn = document.getElementById("restartBtn");
-
-const width = 10;
-const height = 20;
-grid.style.gridTemplateColumns = "repeat(" + width + ", 30px)";
-grid.style.gridTemplateRows = "repeat(" + height + ", 30px)";
-
-const next_width = 5;
-const next_height = 5;
-next_grid.style.gridTemplateColumns = "repeat(" + next_width + ", 30px)";
-next_grid.style.gridTemplateRows = "repeat(" + next_height + ", 30px)";
+const pieces = 'ILJOTSZ';
 
 
+const main_grid = {
+    width: 10,
+    height: 20,
+    cell: "#grid #cell",
+    grid: document.getElementById("grid"),
+};
 
-function createGrid() {
-  grid.innerHTML = "";
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
+const next_grid = {
+    width: 5,
+    height: 5,
+    cell: "#next #cell",
+    grid: document.getElementById("next"),
+    matrix: createPiece(pieces[pieces.length * Math.random() | 0]),
+}
+
+
+
+function createGrid(gr) {
+  gr.grid.innerHTML = "";  
+  gr.grid.style.gridTemplateColumns = "repeat(" + gr.width + ", 30px)";
+  gr.grid.style.gridTemplateRows = "repeat(" + gr.height + ", 30px)";
+
+  for (let y = 0; y < gr.height; y++) {
+    for (let x = 0; x < gr.width; x++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
       cell.id = "cell" + ((y * width) + x);
@@ -28,20 +36,9 @@ function createGrid() {
   }
 }
 
-function createNextGrid() {
-    next_grid.innerHTML = "";
-    for (let y = 0; y < next_height; y++) {
-      for (let x = 0; x < next_width; x++) {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.id = "cell" + ((y * width) + x);
-        next_grid.appendChild(cell)
-      }
-    }
-  }
+createGrid(main_grid);
+createGrid(next_grid);
 
-createGrid();
-createNextGrid();
 
 function colorCell(x, y, color) {
   const index = y * width + x;
