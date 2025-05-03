@@ -206,15 +206,36 @@ function playerReset(){
     player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
     if (collide(arena, player)) {
-        // drawMatrix(player.matrix, player.pos, main_grid);
-        game.over = true;
         showGameOverPopup();
     }
 }
 
 function showGameOverPopup() {
-    document.getElementById('finalScore').textContent = game.score;
-    document.getElementById('gameOverPopup').style.display = 'flex';
+    if (game.over){
+        return;
+    }
+
+    const gameOverPopup = document.getElementById('gameOverPopup');
+    const finalScoreSpan = document.getElementById('finalScore');
+    gameOverPopup.style.display = 'flex';
+
+    let currentScore = 0;
+    let duration = 1000;
+    const startTime = performance.now();
+
+    function animateScore(time) {
+        const elapsed = time - startTime;
+        currentScore = Math.min(Math.floor((elapsed / duration) * game.score), game.score);
+        finalScoreSpan.textContent = currentScore;
+
+        if (currentScore < game.score) {
+            requestAnimationFrame(animateScore);
+        } else {
+            game.over = true;
+        }
+    }
+
+    requestAnimationFrame(animateScore);
 }
 
 
@@ -269,8 +290,7 @@ let lastTime = 0;
 let dropCounter = 0;
 let dropInterval = 1000;
 
-function update(time = 0){
-    if (game.over) return;
+function update(time = 0){  
     const deltaTime = time -lastTime;
     lastTime = time;
     
@@ -313,7 +333,6 @@ function restart() {
     playerReset();
 
     draw();
-    requestAnimationFrame(update);
 }
 
 
