@@ -262,6 +262,21 @@ function playerRotate(dir) {
     }
 }
 
+function pauseGame() {
+    if (!game.over && !game.pause) {
+        game.pause = true;
+        document.getElementById('pausePopup').style.display = 'flex';
+    }
+}
+
+function resumeGame() {
+    if (!game.over && game.pause) {
+        game.pause = false;
+        document.getElementById('pausePopup').style.display = 'none';
+        lastTime = performance.now(); // Prevent large deltaTime
+    }
+}
+
 
 function playerDrop(){
     player.pos.y++;
@@ -354,10 +369,14 @@ document.addEventListener('keydown', event => {
     }else if (event.key === "r"){
         restart();
     }else if (event.key === "p"){
-        game.pause = !game.pause
+        pauseGame();
     }else if (event.key === "ArrowUp" && !game.pause){
         playerRotate(1);
     }
 })
+
+pauseBtn.addEventListener('click', pauseGame);
+resumeBtn.addEventListener('click', resumeGame);
+restartBtn.addEventListener('click', restart);
 
 update();
