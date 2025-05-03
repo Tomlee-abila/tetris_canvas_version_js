@@ -31,7 +31,6 @@
         </div>
         
         <button id="pauseBtn">Pause</button>
-        <button id="resumeBtn">Resume</button>
         <button id="restartBtn">Restart</button>
       </div>
     </div>
@@ -42,6 +41,13 @@
       <h2>Game Over</h2>
       <p>Your Score: <span id="finalScore">0</span></p>
       <button onclick="restart()">Restart</button>
+    </div>
+  </div>
+
+  <div id="pausePopup" style="display: none;" class="popup">
+    <div class="popup-content">
+      <h2>Paused</h2>
+      <button id="resumeBtn">Resume</button>
     </div>
   </div>
   
