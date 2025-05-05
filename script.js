@@ -1,4 +1,5 @@
 const score = document.querySelector(".score");
+const timer = document.querySelector(".timer");
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const restartBtn = document.getElementById("restartBtn");
@@ -306,18 +307,37 @@ let lastTime = 0;
 let dropCounter = 0;
 let dropInterval = 1000;
 
-function update(time = 0){  
+const game = {
+    pause: false,
+    score: 0,
+    over: false,
+    add: 5,
+    lives: 0,
+    time: 0,
+};
+
+function update(time = 0){
     const deltaTime = time -lastTime;
     lastTime = time;
     
-    dropCounter += deltaTime;
-    
-    if (dropCounter >= dropInterval && !game.pause){
-        playerDrop();
-        lastTime = time
-    }
-    score.innerHTML = game.score; 
-    draw();
+    dropCounter += deltaTime;     
+       
+    if (!game.pause && !game.over){
+        score.innerHTML = game.score        
+
+        if (dropCounter >= 1000){
+            game.time += Math.floor(dropCounter/1000);
+            timer.innerHTML = `Time: ${game.time}s`;
+        }
+
+        if (dropCounter >= dropInterval){        
+            console.log(dropCounter)
+            playerDrop();
+            lastTime = time
+            
+        } 
+        draw();
+    }     
     requestAnimationFrame(update);
 }
 
@@ -325,12 +345,7 @@ const arena = createMatrix(main_grid.width, main_grid.height);
 console.log(arena);
 console.table(arena);
 
-const game = {
-    pause: false,
-    score: 0,
-    over: false,
-    add: 5,
-};
+
 
 function restart() {
     arena.forEach(row => row.fill(0));
@@ -342,6 +357,7 @@ function restart() {
     game.pause = false;
     game.score = 0;
     game.over = false;
+    game.time = 0;
     score.innerHTML = 0;
 
     document.getElementById('gameOverPopup').style.display = 'none';
