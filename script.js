@@ -22,6 +22,8 @@ const next_grid = {
     matrix: createPiece(pieces[pieces.length * Math.random() | 0]),
 }
 
+const arena = createMatrix(main_grid.width, main_grid.height);
+
 function updateLives(num){
     lives.innerHTML = '<div class="heart"></div>'.repeat(num);
 }
@@ -56,12 +58,17 @@ function colorCell(x, y, color, gr) {
     }
 }
 
-function drawMatrix(matrix, offset, gr){
+function drawMatrix(matrix, offset, gr, all = false){
   matrix.forEach((row, y) => {
       row.forEach((value, x) => {
-          if (value !== 0){
-              colorCell(x + offset.x, y + offset.y, colors[value], gr);
-          }
+        if (!all){
+            if (value != 0){
+                colorCell(x + offset.x, y + offset.y, colors[value], gr);
+            }
+        }else{
+            colorCell(x + offset.x, y + offset.y, colors[value], gr);
+        }
+          
       })
   });
 }
@@ -112,12 +119,12 @@ function clear_grid(gr){
   }
 }
 
-function draw(){
-    clear_grid(main_grid);
-    drawMatrix(arena, {x:0, y: 0}, main_grid)
-    drawMatrix(player.matrix, player.pos, main_grid);
+function draw(){    
+    merge(game.arena, player);
+    drawMatrix(game.arena, {x:0, y: 0}, main_grid, true);
     clear_grid(next_grid);
     drawMatrix(next_grid.matrix, {x: 1, y: 1}, next_grid)
+    game.arena = structuredClone(arena);
 }
 
 function merge(arena, player){
@@ -326,6 +333,8 @@ const game = {
     lives: 3,
     add: 5,
     time: 0,
+    currentScore: 0,
+    arena: structuredClone(arena),
 };
 
 updateLives(game.lives);
@@ -337,11 +346,14 @@ function update(time = 0){
     dropCounter += deltaTime;     
        
     if (!game.pause && !game.over){
-        score.innerHTML = game.score        
+        if (game.score != game.currentScore){
+            score.innerHTML = game.score
+            game.currentScore = game.score;
+        }                
 
         if (dropCounter >= 1000){
             game.time += Math.floor(dropCounter/1000);
-            timer.innerHTML = `Time: ${game.time}s`;
+            timer.innerHTML = `${game.time}`;
         }
 
         if (dropCounter >= dropInterval){        
@@ -353,8 +365,6 @@ function update(time = 0){
     }     
     requestAnimationFrame(update);
 }
-
-const arena = createMatrix(main_grid.width, main_grid.height);
 
 function restart() {
     arena.forEach(row => row.fill(0));
