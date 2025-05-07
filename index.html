@@ -10,8 +10,7 @@
   <div class="game" >
     <h1>Tetris DOM</h1>
     <div id="game-container">
-      <canvas id="tetris" width="240" height="400" style="display: none;"></canvas>
-      <div id="grid"></div>
+      
       <div id="sidebar">
         <h2>Controls</h2>
         <ul>
@@ -21,7 +20,16 @@
           <li>P: Pause</li>
           <li>R: Restart</li>
         </ul>
-        <div class="heart"></div>
+      </div>
+
+      <div id="grid"></div>
+      <div id="sidebar">        
+        <h2>Lives</h2>
+        <div  class="lives" style="display: flex; flex-direction: row; gap: 0.5rem;">
+          <div class="heart"></div>
+          <div class="heart"></div>
+          <div class="heart"></div>
+        </div>
 
         <div style="display: flex; flex-direction: row; gap: 0.5rem;">
           <h2>Score:</h2>
