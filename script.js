@@ -323,10 +323,12 @@ const game = {
     pause: false,
     score: 0,
     over: false,
+    lives: 3,
     add: 5,
-    lives: 0,
     time: 0,
 };
+
+updateLives(game.lives);
 
 function update(time = 0){
     const deltaTime = time -lastTime;
@@ -366,11 +368,19 @@ function restart() {
         y: 0
     };
 
+    if (game.over == true){
+        game.score = 0;
+        game.lives = 3
+        updateLives(game.lives);
+    }    
+
     game.pause = false;
-    game.score = 0;
+    
     game.over = false;
     game.time = 0;
     score.innerHTML = 0;
+
+    updateLives(game.lives);
 
     document.getElementById('gameOverPopup').style.display = 'none';
 
