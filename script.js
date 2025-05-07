@@ -210,9 +210,17 @@ function playerReset(){
     player.pos.y = 0;
     player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
-    if (collide(arena, player)) {
-        game.pause = true;
-        showGameOverPopup();
+    if (collide(arena, player)) {       
+        if (game.lives == 1){
+            game.pause = true;
+            showGameOverPopup();
+        }else{
+            if (game.lives > 0){
+                game.lives--
+            }
+            
+            restart();
+        }        
     }
 }
 
