@@ -117,3 +117,32 @@ button {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.heart {
+  width: 15px;
+  height: 13.5px;
+  background: red;
+  position: relative;
+  transform: rotate(-45deg);
+  margin: 10px;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  width: 15px;
+  height: 13.5px;
+  background: red;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.heart::before {
+  top: -7.5px;
+  left: 0;
+}
+
+.heart::after {
+  left: 7.5px;
+  top: 0;
+}
