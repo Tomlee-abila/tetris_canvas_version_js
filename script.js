@@ -218,7 +218,7 @@ function playerReset(){
             if (game.lives > 0){
                 game.lives--
             }
-            
+
             restart();
         }        
     }
@@ -345,7 +345,6 @@ function update(time = 0){
         }
 
         if (dropCounter >= dropInterval){        
-            console.log(dropCounter)
             playerDrop();
             lastTime = time
             
@@ -356,10 +355,6 @@ function update(time = 0){
 }
 
 const arena = createMatrix(main_grid.width, main_grid.height);
-console.log(arena);
-console.table(arena);
-
-
 
 function restart() {
     arena.forEach(row => row.fill(0));
@@ -398,7 +393,6 @@ player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
 
 
 document.addEventListener('keydown', event => {
-    console.log(event)
     if (event.key === "ArrowLeft" && !game.pause){        
         playerMove(-1);
     }else if (event.key === "ArrowRight" && !game.pause){        
