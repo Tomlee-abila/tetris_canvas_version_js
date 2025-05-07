@@ -1,4 +1,5 @@
 const score = document.querySelector(".score");
+const lives = document.querySelector(".lives")
 const timer = document.querySelector(".timer");
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
@@ -21,6 +22,9 @@ const next_grid = {
     matrix: createPiece(pieces[pieces.length * Math.random() | 0]),
 }
 
+function updateLives(num){
+    lives.innerHTML = '<div class="heart"></div>'.repeat(num);
+}
 
 
 function createGrid(gr) {
