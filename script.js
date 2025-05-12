@@ -307,7 +307,6 @@ function playerDrop(){
         playerReset();
         arenaSweep();
     }
-    dropCounter = 0;
 }
 
 const colors = [
@@ -343,23 +342,21 @@ function update(time = 0){
     const deltaTime = time -lastTime;
     lastTime = time;
     
-    dropCounter += deltaTime;     
+    dropCounter += deltaTime;
+
        
     if (!game.pause && !game.over){
         if (game.score != game.currentScore){
             score.innerHTML = game.score
             game.currentScore = game.score;
-        }                
+        } 
 
-        if (dropCounter >= 1000){
+        if (dropCounter >= dropInterval){ 
             game.time += Math.floor(dropCounter/1000);
             timer.innerHTML = `${game.time}`;
-        }
 
-        if (dropCounter >= dropInterval){        
             playerDrop();
-            lastTime = time
-            
+            dropCounter = 0;            
         } 
         draw();
     }     
@@ -375,15 +372,13 @@ function restart() {
 
     if (game.over == true){
         game.score = 0;
-        game.lives = 3
+        game.lives = 3;
+        game.time = 0;  
         updateLives(game.lives);
     }    
 
-    game.pause = false;
-    
+    game.pause = false;    
     game.over = false;
-    game.time = 0;
-    score.innerHTML = 0;
 
     updateLives(game.lives);
 
@@ -397,7 +392,7 @@ function restart() {
 
 const player = {
     pos: {x: (arena[0].length/2 | 0), y: 0},
-    matrix: next_grid.matrix
+    matrix: createPiece(pieces[pieces.length * Math.random() | 0])
 }
 player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
 
