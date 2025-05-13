@@ -4,25 +4,104 @@ const timer = document.querySelector(".timer");
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const restartBtn = document.getElementById("restartBtn");
-const pieces = 'ILJOTSZ';
 
+const tetromino = [
+    [
+        [1, 1, 1],
+        [0, 1, 0],
+        [0, 0, 0],
+    ],
+    [
+        [2, 2],
+        [2, 2], 
+    ],
+    [
+        [0, 3, 0],
+        [0, 3, 0],
+        [0, 3, 3],
+    ],
+    [
+        [0, 4, 0],
+        [0, 4, 0],
+        [4, 4, 0],
+    ],
+    [
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+        [0, 5, 0, 0],
+    ],
+    [
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0],
+    ],
+    [
+        [7, 7, 0],
+        [0, 7, 7],
+        [0, 0, 0],
+    ]
+]
 
 const main_grid = {
     width: 10,
     height: 20,
-    cell: "#grid #cell",
     grid: document.getElementById("grid"),
 };
 
 const next_grid = {
     width: 5,
     height: 5,
-    cell: "#next #cell",
     grid: document.getElementById("next"),
-    matrix: createPiece(pieces[pieces.length * Math.random() | 0]),
+    matrix: tetromino[tetromino.length * Math.random() | 0],
 }
 
 const arena = createMatrix(main_grid.width, main_grid.height);
+
+createGrid(main_grid);
+createGrid(next_grid);
+
+const player = {
+    pos: {x: (arena[0].length/2 | 0), y: 0},
+    matrix: tetromino[tetromino.length * Math.random() | 0].map(row => row.slice()),
+}
+player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
+
+
+const colors = [
+    '#333',
+    'linear-gradient(45deg, #ff4040,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #4040ff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #ff00ff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #00cc00,rgb(252, 252, 252))', 
+    'linear-gradient(45deg, #00ffff,rgb(255, 255, 255))', 
+    'linear-gradient(45deg, #ff9900,rgb(253, 253, 253))', 
+    'linear-gradient(45deg, #ff69b4,rgb(255, 255, 255))', 
+];
+
+let lastTime = 0;
+
+let dropCounter = 0;
+let dropInterval = 1000;
+
+const game = {
+    pause: false,
+    score: 0,
+    over: false,
+    lives: 3,
+    add: 5,
+    time: 0,
+    currentScore: 0,
+    arena: structuredClone(arena),
+};
+
+updateLives(game.lives);
+
+pauseBtn.addEventListener('click', pauseGame);
+resumeBtn.addEventListener('click', resumeGame);
+restartBtn.addEventListener('click', restart);
+
+update();
 
 function updateLives(num){
     lives.innerHTML = '<div class="heart"></div>'.repeat(num);
@@ -38,15 +117,10 @@ function createGrid(gr) {
     for (let x = 0; x < gr.width; x++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      cell.id = "cell" + ((y * gr.width) + x);
       gr.grid.appendChild(cell)
     }
   }
 }
-
-createGrid(main_grid);
-createGrid(next_grid);
-
 
 function colorCell(x, y, color, gr) {
     const index = y * gr.width + x;
@@ -73,22 +147,6 @@ function drawMatrix(matrix, offset, gr, all = false){
   });
 }
  
-function arenaSweep(){
-    outer: for (let y = arena.length -1; y > 0; y--){
-        for (let x = 0; x < arena[y].length; x++){
-            if (arena[y][x] === 0){
-                continue outer;
-            }
-        }
-        const row = arena.splice(y, 1)[0].fill(0);
-        arena.unshift(row);
-        y++;
-        game.score += game.add;
-    }
-}
-
-
-
 function collide(arena, player){
     for (let y = 0; y < player.matrix.length; y++){
         for (let x = 0; x < player.matrix[y].length; x++){
@@ -164,56 +222,9 @@ function rotate(matrix, dir){
     }
 }
 
-function createPiece (type) {
-    if (type === 'T'){
-        return[
-            [1, 1, 1],
-            [0, 1, 0],
-            [0, 0, 0],
-        ];
-    }else if (type === 'O'){
-        return[
-            [2, 2],
-            [2, 2],            
-        ];
-    }else if (type === 'L'){
-        return[
-            [0, 3, 0],
-            [0, 3, 0],
-            [0, 3, 3],
-        ];
-    }else if (type === 'J'){
-        return[ 
-            [0, 4, 0],
-            [0, 4, 0],
-            [4, 4, 0],
-        ];
-    }else if (type === 'I'){
-        return[
-            [0, 5, 0, 0],
-            [0, 5, 0, 0],
-            [0, 5, 0, 0],
-            [0, 5, 0, 0],
-        ];
-    }else if (type === 'S'){
-        return[ 
-            [0, 6, 6],
-            [6, 6, 0],
-            [0, 0, 0],
-        ];
-    }else if (type === 'Z'){
-        return[ 
-            [7, 7, 0],
-            [0, 7, 7],
-            [0, 0, 0],
-        ];
-    }
-}
-
-
 function playerReset(){
-    player.matrix = next_grid.matrix    
-    next_grid.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    player.matrix = next_grid.matrix.map(row => row.slice());    
+    next_grid.matrix = tetromino[tetromino.length * Math.random() | 0];
     player.pos.y = 0;
     player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);    
     
@@ -225,7 +236,6 @@ function playerReset(){
             if (game.lives > 0){
                 game.lives--
             }
-
             restart();
         }        
     }
@@ -309,35 +319,6 @@ function playerDrop(){
     }
 }
 
-const colors = [
-    '#333',
-    'linear-gradient(45deg, #ff4040,rgb(255, 255, 255))', 
-    'linear-gradient(45deg, #4040ff,rgb(255, 255, 255))', 
-    'linear-gradient(45deg, #ff00ff,rgb(255, 255, 255))', 
-    'linear-gradient(45deg, #00cc00,rgb(252, 252, 252))', 
-    'linear-gradient(45deg, #00ffff,rgb(255, 255, 255))', 
-    'linear-gradient(45deg, #ff9900,rgb(253, 253, 253))', 
-    'linear-gradient(45deg, #ff69b4,rgb(255, 255, 255))', 
-];
-
-let lastTime = 0;
-
-let dropCounter = 0;
-let dropInterval = 1000;
-
-const game = {
-    pause: false,
-    score: 0,
-    over: false,
-    lives: 3,
-    add: 5,
-    time: 0,
-    currentScore: 0,
-    arena: structuredClone(arena),
-};
-
-updateLives(game.lives);
-
 function update(time = 0){
     const deltaTime = time -lastTime;
     lastTime = time;
@@ -371,10 +352,7 @@ function restart() {
     };
 
     if (game.over == true){
-        game.score = 0;
-        game.lives = 3;
-        game.time = 0;  
-        updateLives(game.lives);
+        window.location.reload();
     }    
 
     game.pause = false;    
@@ -390,11 +368,20 @@ function restart() {
 }
 
 
-const player = {
-    pos: {x: (arena[0].length/2 | 0), y: 0},
-    matrix: createPiece(pieces[pieces.length * Math.random() | 0])
+function arenaSweep(){
+    outer: for (let y = arena.length -1; y > 0; y--){
+        for (let x = 0; x < arena[y].length; x++){
+            if (arena[y][x] === 0){
+                continue outer;
+            }
+        }
+        const row = arena.splice(y, 1)[0].fill(0);
+        arena.unshift(row);
+        y++;
+        game.score += game.add;
+    }
 }
-player.pos.x = (arena[0].length/2 | 0) - (player.matrix[0].length/2 | 0);
+
 
 
 document.addEventListener('keydown', event => {
@@ -404,17 +391,17 @@ document.addEventListener('keydown', event => {
         playerMove(1);
     }else if (event.key === "ArrowDown" && !game.pause){
         playerDrop();
-    }else if (event.key === "r"){
+    }else if (event.key === "r" ||event.key=='R'){
         restart();
-    }else if (event.key === "p"){
+    }else if (event.key === "p" || event.key=='R'){
         pauseGame();
     }else if (event.key === "ArrowUp" && !game.pause){
         playerRotate(1);
+    }else if(event.key==='Enter'){
+        while(!collide(arena, player)){
+            player.pos.y++;
+        }
+        player.pos.y--; 
+        merge(arena, player);
     }
 })
-
-pauseBtn.addEventListener('click', pauseGame);
-resumeBtn.addEventListener('click', resumeGame);
-restartBtn.addEventListener('click', restart);
-
-update();
